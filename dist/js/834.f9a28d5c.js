@@ -1,2 +1,2 @@
 "use strict";(self["webpackChunkfluffy"]=self["webpackChunkfluffy"]||[]).push([[834],{834:function(n,u,t){t.r(u),t.d(u,{default:function(){return i}});var a=t(252),c=t(963),e=t(140);const f=n=>((0,a.dD)("data-v-547fd22c"),n=n(),(0,a.Cn)(),n),r=f((()=>(0,a._)("img",{src:e,alt:"bunny"},null,-1)));function l(n,u){return(0,a.wg)(),(0,a.iD)("main",null,[(0,a.Wm)(c.uT,{name:"pet",appear:""},{default:(0,a.w5)((()=>[r])),_:1})])}var d=t(744);const p={},s=(0,d.Z)(p,[["render",l],["__scopeId","data-v-547fd22c"]]);var i=s},140:function(n,u,t){n.exports=t.p+"img/bunny.10c85cc7.png"}}]);
-//# sourceMappingURL=834.130fbc1d.js.map
+//# sourceMappingURL=834.f9a28d5c.js.map
