@@ -11,7 +11,7 @@
 export default {
     methods: {
         iconType(name) {
-            if (this.$route.path === '/'+name.toLowerCase()) {
+            if (this.$route.path === '/' + name.toLowerCase()) {
                 return '';
             } else {
                 return '-outline';
@@ -90,15 +90,31 @@ a {
     color: initial;
     @include flex(column, center, center, nowrap);
     transition: color 0.1s ease;
+    font-size: 0.8em;
+    gap: 4px;
 
     &:active {
         color: #f5f5f5;
-        
+
     }
+
+    z-index: 6;
 }
 
 .router-link-active {
     color: #fff;
+
+    &::before {
+        width: 70px;
+        height: 35px;
+        border-radius: 500px;
+        content: '';
+        position: absolute;
+        background-color: rgba(255, 255, 255, 0.43);
+        opacity: 35%;
+        z-index: 5;
+        transform: translateY(-11px);
+    }
 }
 
 @media only screen and (min-width: 768px) {

@@ -159,15 +159,15 @@ $blue2: #BDE0FE;
 
 
 .green .progress {
-  background-color: #64cd64;
+  background-color: #31fa71;
 }
 
 .yellow .progress {
-  background-color: #ffff00;
+  background-color: #fff25e;
 }
 
 .red .progress {
-  background-color: #ff0000;
+  background-color: #FF3D00;
 }
 
 header {

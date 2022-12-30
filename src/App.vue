@@ -2,7 +2,7 @@
   <AppHeader />
   <div id="wrapper">
     <router-view v-slot="{ Component, route }">
-      <Transition name="slide">
+      <Transition :name="'slide-' + slideDirection">
         <component :is="Component" :key="route.path" />
       </Transition>
     </router-view>
@@ -13,13 +13,142 @@
 <script>
 import AppHeader from './components/AppHeader.vue';
 import AppNav from './components/AppNav.vue';
+// import { beforeRouteLeave } from 'vue-router';
+import { mapState } from 'vuex';
 
 export default {
   name: 'App',
+  data() {
+    return {
+      // slide direction variable and the array with route order
+      slideDirection: 'right',
+      routesArray: [
+        "/kitchen",
+        "/bathroom",
+        "/playroom",
+        "/bedroom",
+      ],
+    }
+  },
   components: {
     AppHeader,
     AppNav,
-  }
+  },
+
+  computed: {
+    ...mapState([
+      'hunger',
+      'cleanliness',
+      'happiness',
+      'energy',
+      'foodList',
+    ])
+  },
+
+  mounted() {
+    setInterval(() => {
+      localStorage.setItem('timestamp', Date.now());
+
+      localStorage.setItem('hunger', this.hunger);
+      localStorage.setItem('cleanliness', this.cleanliness);
+      localStorage.setItem('happiness', this.happiness);
+      localStorage.setItem('energy', this.energy);
+      localStorage.setItem('foodList', JSON.stringify(this.foodList));
+    }, 2000);
+  },
+
+  created() {
+    const savedFoodList = JSON.parse(localStorage.getItem('foodList'));
+    if (savedFoodList) {
+      this.$store.dispatch('loadFoodList', savedFoodList);
+    }
+    if (localStorage.getItem('timestamp')) {
+      const savedTimestamp = Number(localStorage.getItem('timestamp'));
+      const currentTimestamp = Date.now();
+      const elapsedTime = currentTimestamp - savedTimestamp;
+      console.log(`Time saved was ${new Date(Number(savedTimestamp)).toString()} and current time is ${new Date(currentTimestamp).toString()}, time elapsed ${elapsedTime}`);
+
+      const ticks = elapsedTime / 5000;
+
+      this.updateHunger(this.calculateHunger(ticks));
+      this.updateCleanliness(this.calculateCleanliness(ticks));
+      this.updateHappiness(this.calculateHappiness(ticks));
+      this.updateEnergy(this.calculateEnergy(ticks));
+    }
+  },
+
+  // beforeRouteLeave(to, from, next) {
+  //   console.log('test');
+  //   // Update the slide direction before the route is changed
+  //   this.slideDirection = this.getRouteDirection(from.path, to.path);
+
+  //   // Proceed with the route change
+  //   next();
+  // },
+  watch: {
+    $route(to, from) {
+      // Update the slide direction when the route changes
+      this.slideDirection = this.getRouteDirection(from.path, to.path);
+    },
+  },
+  methods: {
+    updateHunger(value) {
+      if (value < 0) {
+        value = 0;
+      }
+      this.$store.commit('setHunger', value);
+    },
+    updateCleanliness(value) {
+      if (value < 0) {
+        value = 0;
+      }
+      this.$store.commit('setCleanliness', value);
+    },
+    updateHappiness(value) {
+      if (value < 0) {
+        value = 0;
+      }
+      this.$store.commit('setHappiness', value);
+    },
+    updateEnergy(value) {
+      if (value < 0) {
+        value = 0;
+      }
+      this.$store.commit('setEnergy', value);
+    },
+
+
+    calculateHunger(ticks) {
+      return Math.max(0, localStorage.getItem('hunger') - 3 * Math.floor(ticks / 330000));
+    },
+    calculateCleanliness(ticks) {
+      return Math.max(0, localStorage.getItem('cleanliness') - 4 * Math.floor(ticks / 330000));
+    },
+    calculateHappiness(ticks) {
+      return Math.max(0, localStorage.getItem('happiness') - 5 * Math.floor(ticks / 330000));
+    },
+    calculateEnergy(ticks) {
+      return Math.max(0, localStorage.getItem('energy') - 4 * Math.floor(ticks / 330000));
+    },
+
+
+    // Function to determine the direction of navigation
+    getRouteDirection(currentRoute, nextRoute) {
+      // Find the index of the current route and the next route in the array
+      const currentIndex = this.routesArray.indexOf(currentRoute);
+      const nextIndex = this.routesArray.indexOf(nextRoute);
+
+      // Check if the next route is to the right or to the left of the current route
+      if (nextIndex > currentIndex) {
+        return "right";
+      } else if (nextIndex < currentIndex) {
+        return "left";
+      } else {
+        // If the next route is the same as the current route, return null
+        return null;
+      }
+    },
+  },
 }
 
 </script>
@@ -66,29 +195,56 @@ $blue2: #BDE0FE;
   opacity: 0;
 }
 
-.slide-enter-active,
-.slide-leave-active {
+.slide-right-enter-active,
+.slide-right-leave-active {
   transition: all 0.25s ease-out;
 }
 
-.slide-enter-to {
+.slide-right-enter-to {
   position: absolute;
   right: 0;
 }
 
-.slide-enter-from {
+.slide-right-enter-from {
   position: absolute;
   right: -100%;
 }
 
-.slide-leave-to {
+.slide-right-leave-to {
   position: absolute;
   left: -100%;
 }
 
-.slide-leave-from {
+.slide-right-leave-from {
   position: absolute;
   left: 0;
+}
+
+
+
+.slide-left-enter-active,
+.slide-left-leave-active {
+  transition: all 0.25s ease-out;
+}
+
+.slide-left-enter-to {
+  position: absolute;
+  left: 0;
+}
+
+.slide-left-enter-from {
+  position: absolute;
+  left: -100%;
+}
+
+.slide-left-leave-to {
+  position: absolute;
+  right: -100%;
+}
+
+.slide-left-leave-from {
+  position: absolute;
+  right: 0;
 }
 
 
@@ -125,6 +281,7 @@ html {
   overflow: hidden;
   @include absolute(0, 0, 0, 0);
   @include flex(row, stretch, center, nowrap);
+
   main {
     width: 100vw;
   }
@@ -133,38 +290,4 @@ html {
 #app {
   @include flex(column, space-between, center, nowrap);
 }
-
-// @media only screen and (min-width: 750px) {
-
-//   .slide-enter-active,
-//   .slide-leave-active {
-//     transition: all 0.25s ease-out;
-//   }
-
-//   .slide-enter-to {
-//     // position: absolute;
-//     // right: 0;
-//     transform: translateX(200px);
-//   }
-
-//   .slide-enter-from {
-//     // position: absolute;
-//     // right: -100%;
-//     transform: translateX(-200px);
-
-//   }
-
-//   .slide-leave-to {
-//     // position: absolute;
-//     // left: -100%;
-//     transform: translateX(-200px);
-//   }
-
-//   .slide-leave-from {
-//     // position: absolute;
-//     // left: 0;
-//     transform: translateX(200px);
-//   }
-
-// }
 </style>
