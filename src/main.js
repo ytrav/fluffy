@@ -20,7 +20,7 @@ const store = createStore({
                     value: 10,
                 },
                 {
-                    name: 'QUASO',
+                    name: 'Quaso',
                     icon: 'food-croissant',
                     value: 25,
                 },
@@ -63,6 +63,71 @@ const store = createStore({
                     name: 'Turkey',
                     icon: 'food-turkey',
                     value: 70,
+                },
+                {
+                    name: 'Tea',
+                    icon: 'tea',
+                    value: 10,
+                },
+                {
+                    name: 'Tea',
+                    icon: 'tea',
+                    value: 10,
+                },
+                {
+                    name: 'Sugar',
+                    icon: 'cube-outline',
+                    value: 40,
+                },
+                {
+                    name: 'Sugar',
+                    icon: 'cube-outline',
+                    value: 40,
+                },
+                {
+                    name: 'Chili',
+                    icon: 'chili-mild',
+                    value: -15,
+                },
+                {
+                    name: 'Chili',
+                    icon: 'chili-mild',
+                    value: -15,
+                },
+                {
+                    name: 'Chili',
+                    icon: 'chili-mild',
+                    value: -15,
+                },
+                {
+                    name: 'Cupcake',
+                    icon: 'cupcake',
+                    value: 25,
+                },
+                {
+                    name: 'Beer',
+                    icon: 'glass-mug',
+                    value: 5,
+                },
+                {
+                    name: 'Beer',
+                    icon: 'glass-mug',
+                    value: 5,
+                },
+                {
+                    name: 'Wine',
+                    icon: 'glass-wine',
+                    value: 10,
+                },
+                {
+                    name: 'Cupcake',
+                    icon: 'cupcake',
+                    value: 25,
+                },
+                {
+                    name: 'Wine',
+                    icon: 'glass-wine',
+                    value: 10,
                 },
 
             ],
@@ -151,6 +216,7 @@ const Playroom = () => import('./components/PagePlayroom.vue');
 const Bedroom = () => import('./components/PageBedroom.vue');
 
 const routes = [
+    {path: '/', redirect: '/kitchen'},
     { path: '/kitchen', component: Kitchen },
     { path: '/bathroom', component: Bathroom },
     { path: '/playroom', component: Playroom },

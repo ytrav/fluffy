@@ -67,12 +67,16 @@ export default {
       const currentTimestamp = Date.now();
       const elapsedTime = currentTimestamp - savedTimestamp;
       console.log(`Time saved was ${new Date(Number(savedTimestamp)).toString()} and current time is ${new Date(currentTimestamp).toString()}, time elapsed ${elapsedTime}`);
+      console.log(`expected to subtract the next amount of points from each stat:`);
 
       const ticks = elapsedTime / 5000;
-
+      console.log(`hunger value is ${this.$store.state.hunger}`);
       this.updateHunger(this.calculateHunger(ticks));
+      console.log(`cleanliness value is ${this.$store.state.cleanliness}`);
       this.updateCleanliness(this.calculateCleanliness(ticks));
+      console.log(`happiness value is ${this.$store.state.happiness}`);
       this.updateHappiness(this.calculateHappiness(ticks));
+      console.log(`energy value is ${this.$store.state.energy}`);
       this.updateEnergy(this.calculateEnergy(ticks));
     }
   },
@@ -93,24 +97,28 @@ export default {
   },
   methods: {
     updateHunger(value) {
+      console.log(`hunger value became ${value}`);
       if (value < 0) {
         value = 0;
       }
       this.$store.commit('setHunger', value);
     },
     updateCleanliness(value) {
+      console.log(`cleanliness value became ${value}`);
       if (value < 0) {
         value = 0;
       }
       this.$store.commit('setCleanliness', value);
     },
     updateHappiness(value) {
+      console.log(`happiness value became ${value}`);
       if (value < 0) {
         value = 0;
       }
       this.$store.commit('setHappiness', value);
     },
     updateEnergy(value) {
+      console.log(`energy value became ${value}`);
       if (value < 0) {
         value = 0;
       }
@@ -119,7 +127,9 @@ export default {
 
 
     calculateHunger(ticks) {
-      return Math.max(0, localStorage.getItem('hunger') - 3 * Math.floor(ticks / 330000));
+      console.log(`hunger was ${Number(localStorage.getItem('hunger'))} and it's a ${typeof Number(localStorage.getItem('hunger'))}`);
+      console.log(`no when we calculate and subtract 3 for every 330000 ticks, we get ${Math.max(0, Number(localStorage.getItem('hunger')) - 3 * Math.floor(ticks / 330000))}`);
+      return Math.max(0, Number(localStorage.getItem('hunger')) - 3 * Math.floor(ticks / 330000));
     },
     calculateCleanliness(ticks) {
       return Math.max(0, localStorage.getItem('cleanliness') - 4 * Math.floor(ticks / 330000));
@@ -259,6 +269,7 @@ main {
 
 img {
   max-width: 445px;
+  max-height: 70vh;
 }
 
 

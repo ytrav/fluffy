@@ -1,7 +1,8 @@
 <template>
     <nav>
         <router-link @click="iconType(button.title)" v-for="button in nav" :key="button" :to="button.path">
-            <mdicon :name="button.icon + iconType(button.title)" size="30" />{{ button.title }}
+            <mdicon :name="button.icon + iconType(button.title)" size="30" /><span class="link-tag">{{ button.title
+                }}</span>
         </router-link>
 
     </nav>
@@ -121,6 +122,19 @@ a {
     nav {
         justify-content: center;
         gap: 40px;
+    }
+}
+
+@media only screen and (max-width: 325px) {
+    nav {
+        padding: 10px 25px;
+    }
+    .link-tag {
+        display: none;
+    }
+
+    .router-link-active::before {
+        transform: none;
     }
 }
 </style>

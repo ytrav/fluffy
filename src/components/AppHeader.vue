@@ -1,21 +1,31 @@
 <template>
   <header>
-    <div :class="hungerClass" class="stat">
+    <div :class="hungerClass" @mouseleave="showTip(null)" @mouseover="showTip('hunger')" class="stat">
       <mdicon name="food" size="25" />
       <div :style="{ height: (this.$store.state.hunger / 100) * 40 + 'px' }" class="progress"></div>
+      <Transition name="tooltip">
+        <span v-show="tooltip === 'hunger'" class="stat-caption">{{ this.$store.state.hunger }}</span>
+      </Transition>
     </div>
-    <div :class="cleanlinessClass" class="stat">
+    <div :class="cleanlinessClass" @mouseleave="showTip(null)" @mouseover="showTip('cleanliness')" class="stat">
       <mdicon name="shower" size="25" />
       <div :style="{ height: (this.$store.state.cleanliness / 100) * 40 + 'px' }" class="progress"></div>
+      <Transition name="tooltip">
+        <span v-show="tooltip === 'cleanliness'" class="stat-caption">{{ this.$store.state.cleanliness }}</span>
+      </Transition>
     </div>
     <h2>fluffy</h2>
-    <div :class="happinessClass" class="stat">
+    <div :class="happinessClass" @mouseleave="showTip(null)" @mouseover="showTip('happiness')" class="stat">
       <mdicon name="emoticon-happy" size="25" />
       <div :style="{ height: (this.$store.state.happiness / 100) * 40 + 'px' }" class="progress"></div>
+      <Transition name="tooltip"><span v-show="tooltip === 'happiness'" class="stat-caption">{{ this.$store.state.happiness }}</span>
+      </Transition>
     </div>
-    <div :class="energyClass" class="stat">
+    <div :class="energyClass" @mouseleave="showTip(null)" @mouseover="showTip('energy')" class="stat">
       <mdicon name="sleep" size="25" />
       <div :style="{ height: (this.$store.state.energy / 100) * 40 + 'px' }" class="progress"></div>
+      <Transition name="tooltip"><span v-show="tooltip === 'energy'" class="stat-caption">{{ this.$store.state.energy }}</span>
+      </Transition>
     </div>
   </header>
 </template>
@@ -25,13 +35,17 @@ export default {
   data() {
     return {
       interval: 350000,
-      // hungerClass: '',
-      // cleanlinessClass: '',
-      // happinessClass: '',
-      // energyClass: '',
+      tooltip: null,
     }
   },
-  methods: {},
+  methods: {
+    showTip(stat) {
+      this.tooltip = stat;
+      // setTimeout(() => {
+      //   this.tooltip = null;
+      // }, 5000);
+    }
+  },
   mounted() {
     var that = this;
     setInterval(() => {
@@ -158,6 +172,18 @@ $blue: #A2D2FF;
 $blue2: #BDE0FE;
 
 
+.tooltip-enter-active,
+.tooltip-leave-active {
+  transition: all 0.2s ease-out;
+}
+
+.tooltip-enter-from,
+.tooltip-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+
 .green .progress {
   background-color: #31fa71;
 }
@@ -205,6 +231,12 @@ header {
       // mix-blend-mode: difference;
     }
 
+    .stat-caption {
+      position: absolute;
+      // transform: translateY(35px);
+      margin-top: 65px;
+    }
+
 
     .progress {
       width: 40px;
@@ -220,6 +252,17 @@ header {
 
       transition: height 0.4s ease;
     }
+  }
+}
+
+@media only screen and (max-width: 360px) {
+  h2 {
+    display: none;
+  }
+
+  header {
+    justify-content: space-between;
+    flex-wrap: wrap;
   }
 }
 </style>

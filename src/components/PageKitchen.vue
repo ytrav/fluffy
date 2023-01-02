@@ -45,10 +45,37 @@ export default {
     },
     consumeFood(index, value) {
       this.$store.commit('removeFood', index);
-      if (value.name === 'Coffee') {
-        this.$store.commit('changeEnergy', Number(value.value));
-      } else {
-        this.$store.commit('changeHunger', Number(value.value));
+      // if (value.name === 'Coffee') {
+      //   this.$store.commit('changeEnergy', Number(value.value));
+      // } else {
+      //   this.$store.commit('changeHunger', Number(value.value));
+      // }
+      switch (value.name) {
+        case 'Coffee':
+          this.$store.commit('changeEnergy', Number(value.value));
+          break;
+        case 'Chili':
+          this.$store.commit('changeHappiness', Number(value.value));
+          break;
+        case 'Sugar':
+          this.$store.commit('changeEnergy', Number(value.value));
+          break;
+        case 'Tea':
+          this.$store.commit('changeHappiness', Number(value.value));
+          break;
+        case 'Beer':
+          this.$store.commit('changeHappiness', Number(value.value));
+          break;
+        case 'Wine':
+          this.$store.commit('changeHappiness', Number(value.value));
+          break;
+        case 'Cupcake':
+          this.$store.commit('changeHappiness', Number(value.value));
+          break;
+
+        default:
+          this.$store.commit('changeHunger', Number(value.value));
+          break;
       }
       this.selectedIndex = null;
     }
@@ -106,8 +133,10 @@ main {
 .food-scroll {
   @include flex(row, flex-start, center, nowrap);
   gap: 20px;
-  overflow-x: scroll;
+  overflow-x: overlay;
+  overflow-y: hidden;
   padding: 0 15px;
+  /* Firefox */
 }
 
 .food-item {
@@ -134,7 +163,7 @@ main {
 
 .confirm {
   @include flex(row, space-between, stretch, nowrap);
-  width: 55px;
+  width: 85px;
   height: 50px;
   // background-color: rgba(255, 255, 255, 0.281);
   position: absolute;
@@ -179,6 +208,33 @@ main {
 
   span {
     opacity: 1;
+  }
+}
+
+@media only screen and (hover: hover) {
+  .food-scroll {
+
+    scrollbar-width: thin;
+    scrollbar-color: #a8a8a8 #ffffff;
+
+    /* Chrome, Edge, and Safari */
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #ffffff00;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #ffffffab;
+      border-radius: 10px;
+
+      // border: 3px solid #ffffff;
+      &:hover {
+        background-color: #ffffffdf;
+      }
+    }
   }
 }
 </style>
