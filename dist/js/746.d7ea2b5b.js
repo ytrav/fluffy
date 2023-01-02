@@ -1,2 +1,2 @@
 "use strict";(self["webpackChunkfluffy"]=self["webpackChunkfluffy"]||[]).push([[746],{746:function(n,u,c){c.r(u),c.d(u,{default:function(){return d}});var f=c(252),t=c(140);const a=n=>((0,f.dD)("data-v-6e07cfa4"),n=n(),(0,f.Cn)(),n),e=a((()=>(0,f._)("img",{src:t,alt:"bunny"},null,-1))),r=[e];function l(n,u){return(0,f.wg)(),(0,f.iD)("main",null,r)}var s=c(744);const i={},o=(0,s.Z)(i,[["render",l],["__scopeId","data-v-6e07cfa4"]]);var d=o},140:function(n,u,c){n.exports=c.p+"img/bunny.10c85cc7.png"}}]);
-//# sourceMappingURL=746.3fd55dbb.js.map
+//# sourceMappingURL=746.d7ea2b5b.js.map
