@@ -71,13 +71,17 @@ export default {
 
       const ticks = elapsedTime / 5000;
       console.log(`hunger value is ${this.$store.state.hunger}`);
-      this.updateHunger(this.calculateHunger(ticks));
+      this.calculateHunger(ticks);
+      console.log(`hunger value is ${this.$store.state.hunger}`);
       console.log(`cleanliness value is ${this.$store.state.cleanliness}`);
-      this.updateCleanliness(this.calculateCleanliness(ticks));
+      this.calculateCleanliness(ticks);
+      console.log(`cleanliness value is ${this.$store.state.cleanliness}`);
       console.log(`happiness value is ${this.$store.state.happiness}`);
-      this.updateHappiness(this.calculateHappiness(ticks));
+      this.calculateHappiness(ticks);
+      console.log(`happiness value is ${this.$store.state.happiness}`);
       console.log(`energy value is ${this.$store.state.energy}`);
-      this.updateEnergy(this.calculateEnergy(ticks));
+      this.calculateEnergy(ticks);
+      console.log(`energy value is ${this.$store.state.energy}`);
     }
   },
 
@@ -129,16 +133,36 @@ export default {
     calculateHunger(ticks) {
       console.log(`hunger was ${Number(localStorage.getItem('hunger'))} and it's a ${typeof Number(localStorage.getItem('hunger'))}`);
       console.log(`no when we calculate and subtract 3 for every 330000 ticks, we get ${Math.max(0, Number(localStorage.getItem('hunger')) - 3 * Math.floor(ticks / 330000))}`);
-      return Math.max(0, Number(localStorage.getItem('hunger')) - 3 * Math.floor(ticks / 330000));
+      let result = Math.max(0, Number(localStorage.getItem('hunger')) - 3 * Math.floor(ticks / 330000));
+
+      if (result < 0) {
+        result = 0;
+      }
+      this.$store.commit('setHunger', result);
     },
     calculateCleanliness(ticks) {
-      return Math.max(0, localStorage.getItem('cleanliness') - 4 * Math.floor(ticks / 330000));
+      let result = Math.max(0, localStorage.getItem('cleanliness') - 4 * Math.floor(ticks / 330000));
+
+      if (result < 0) {
+        result = 0;
+      }
+      this.$store.commit('setCleanliness', result);
     },
     calculateHappiness(ticks) {
-      return Math.max(0, localStorage.getItem('happiness') - 5 * Math.floor(ticks / 330000));
+      let result = Math.max(0, localStorage.getItem('happiness') - 5 * Math.floor(ticks / 330000));
+
+      if (result < 0) {
+        result = 0;
+      }
+      this.$store.commit('setHappiness', result);
     },
     calculateEnergy(ticks) {
-      return Math.max(0, localStorage.getItem('energy') - 4 * Math.floor(ticks / 330000));
+      let result = Math.max(0, localStorage.getItem('energy') - 4 * Math.floor(ticks / 330000));
+
+      if (result < 0) {
+        result = 0;
+      }
+      this.$store.commit('setEnergy', result);
     },
 
 
@@ -270,6 +294,7 @@ main {
 img {
   max-width: 445px;
   max-height: 70vh;
+  min-width: 20vw;
 }
 
 

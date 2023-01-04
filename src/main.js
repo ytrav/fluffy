@@ -9,10 +9,18 @@ import { createStore } from 'vuex';
 const store = createStore({
     state() {
         return {
+            balance: 100,
             hunger: 80,
             cleanliness: 70,
             happiness: 100,
             energy: 15,
+
+            settingsOpen: false,
+
+            settings: {
+                lang: 0, // 0 - eng, 1 - ukr, WIP
+                showArrows: true,
+            },
             foodList: [
                 {
                     name: 'Apple',
@@ -140,6 +148,27 @@ const store = createStore({
     },
 
     mutations: {
+        toggleSettings(state) {
+            state.settingsOpen = !state.settingsOpen;
+        },
+        changeSettings(state, setting) {
+            switch (setting) {
+                case 'lang':
+                    if (state.settings.lang === 0) {
+                        state.settings.lang = 1;
+                    } else {
+                        state.settings.lang = 0;
+                    }
+                    break;
+                case 'arrows':
+                    state.settings.showArrows = !state.settings.showArrows;
+                    break;
+                default:
+                    console.log('ERROR: unknown option selected!');
+                    break;
+            }
+        },
+
         setFoodList(state, foodList) {
             state.foodList = foodList;
         },
@@ -149,7 +178,7 @@ const store = createStore({
             if (state.hunger + amount >= 100) {
                 state.hunger = 100;
             } else {
-                if (state.hunger < 0) {
+                if (state.hunger + amount < 0) {
                     state.hunger = 0;
                 } else {
                     state.hunger += amount;
@@ -160,7 +189,7 @@ const store = createStore({
             if (state.cleanliness + amount >= 100) {
                 state.cleanliness = 100;
             } else {
-                if (state.cleanliness < 0) {
+                if (state.cleanliness + amount < 0) {
                     state.cleanliness = 0;
                 } else {
                     state.cleanliness += amount;
@@ -171,7 +200,7 @@ const store = createStore({
             if (state.happiness + amount >= 100) {
                 state.happiness = 100;
             } else {
-                if (state.happiness < 0) {
+                if (state.happiness + amount < 0) {
                     state.happiness = 0;
                 } else {
                     state.happiness += amount;
@@ -182,7 +211,7 @@ const store = createStore({
             if (state.energy + amount >= 100) {
                 state.energy = 100;
             } else {
-                if (state.energy < 0) {
+                if (state.energy + amount < 0) {
                     state.energy = 0;
                 } else {
                     state.energy += amount;
@@ -190,19 +219,52 @@ const store = createStore({
             }
         },
         setHunger(state, value) {
-            state.hunger = value;
+            if (value < 0) {
+                state.hunger = 0;
+            } else {
+                state.hunger = value;
+            }
         },
         setCleanliness(state, value) {
-            state.cleanliness = value;
+            if (value < 0) {
+                state.cleanliness = 0;
+            } else {
+                state.cleanliness = value;
+            }
         },
         setHappiness(state, value) {
-            state.happiness = value;
+            if (value < 0) {
+                state.happiness = 0;
+            } else {
+                state.happiness = value;
+            }
         },
         setEnergy(state, value) {
-            state.energy = value;
+            if (value < 0) {
+                state.energy = 0;
+            } else {
+                state.energy = value;
+            }
         },
         removeFood(state, index) {
             state.foodList.splice(index, 1);
+        },
+        addFood(state, index) {
+            state.foodList.push(index);
+        },
+
+        setBalance(state, value) {
+            if (value < 0) {
+                console.log('EROR: balabce negative value');
+            } else {
+                state.balance = value;
+            }
+        },
+
+        changeBalance(state, amount) {
+            if (isNaN(amount) === false && state.balance + amount >= 0) {
+                state.balance += amount;
+            }
         }
     }
 })
@@ -216,7 +278,7 @@ const Playroom = () => import('./components/PagePlayroom.vue');
 const Bedroom = () => import('./components/PageBedroom.vue');
 
 const routes = [
-    {path: '/', redirect: '/kitchen'},
+    { path: '/', redirect: '/kitchen' },
     { path: '/kitchen', component: Kitchen },
     { path: '/bathroom', component: Bathroom },
     { path: '/playroom', component: Playroom },

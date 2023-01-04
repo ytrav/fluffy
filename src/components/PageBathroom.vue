@@ -26,9 +26,10 @@
   }
 
   img {
-    transition: all 0.05s ease-out;
+    transition: all .5s ease-out;
     &:active {
       transform: scale(0.97);
+    transition: all 0.05s ease-out;
     }
   }
   </style>

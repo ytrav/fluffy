@@ -2,7 +2,13 @@
   <main>
     <img src="./../assets/bunny.png" alt="bunny">
     <div class="interact">
-      <div class="food-scroll">
+      <button class="arrow left" @click="scrollLeft">
+        <mdicon name="chevron-left" />
+      </button>
+      <button class="arrow right" @click="scrollRight">
+        <mdicon name="chevron-right" />
+      </button>
+      <div class="food-scroll" ref="scrollableContainer">
         <div class="food-item" v-for="(food, index) in foodList" :key="index" @click.prevent="selectFood(index)"
           :class="{ 'food-selected': index === selectedIndex }">
           <mdicon :name="food.icon" />
@@ -37,6 +43,22 @@ export default {
   },
 
   methods: {
+
+    scrollLeft() {
+      this.$refs.scrollableContainer.scrollBy({
+        left: -this.$refs.scrollableContainer.offsetWidth,
+        behavior: 'smooth'
+      });
+    },
+    scrollRight() {
+      this.$refs.scrollableContainer.scrollBy({
+        left: this.$refs.scrollableContainer.offsetWidth,
+        behavior: 'smooth'
+      });
+    },
+
+
+
     selectFood(index) {
       this.selectedIndex = index;
     },
@@ -128,20 +150,73 @@ main {
   @include flex(row, center, stretch, nowrap);
   background-color: rgba(128, 128, 128, 0.214);
   height: 70px;
+  backdrop-filter: blur(5px);
 }
 
 .food-scroll {
   @include flex(row, flex-start, center, nowrap);
-  gap: 20px;
+  gap: 40px;
   overflow-x: overlay;
   overflow-y: hidden;
   padding: 0 15px;
-  /* Firefox */
+}
+
+.arrow {
+  position: absolute;
+  height: 70px;
+  width: 40px;
+  border: none;
+  background-color: #00000023;
+  color: #fff;
+  z-index: 200;
+
+  @include flex(row, center, center, nowrap);
+
+  display: none;
+
+  transition: background-color 0.4s ease-out;
+
+  span {
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  &:hover {
+    background-color: #00000040;
+  }
+
+  &:first-of-type {
+    left: 0;
+  }
+
+  &:last-of-type {
+    right: 0;
+  }
+
+}
+
+.left:hover span {
+  transform: translateX(-5px);
+}
+
+.left:active span {
+  transform: translateX(-5px) scale(0.7);
+}
+
+.right:hover span {
+  transform: translateX(5px);
+}
+
+.right:active span {
+  transform: translateX(5px) scale(0.7);
 }
 
 .food-item {
   position: relative;
   @include flex(column, center, center, nowrap);
+  // width: 80px;
+  // min-width: 80px;
+  // max-width: 80px;
+  flex: 1;
   cursor: default;
 
   &:hover {
@@ -149,6 +224,7 @@ main {
       color: #fff;
     }
   }
+
 }
 
 .tag {
@@ -212,6 +288,21 @@ main {
 }
 
 @media only screen and (hover: hover) {
+  .arrow {
+    display: flex;
+  }
+
+  .food-item {
+
+    &:first-child {
+      margin-left: 40px;
+    }
+
+    &:last-child {
+      margin-right: 40px;
+    }
+  }
+
   .food-scroll {
 
     scrollbar-width: thin;

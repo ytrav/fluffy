@@ -1,36 +1,62 @@
 <template>
   <header>
-    <div :class="hungerClass" @mouseleave="showTip(null)" @mouseover="showTip('hunger')" class="stat">
-      <mdicon name="food" size="25" />
-      <div :style="{ height: (this.$store.state.hunger / 100) * 40 + 'px' }" class="progress"></div>
-      <Transition name="tooltip">
-        <span v-show="tooltip === 'hunger'" class="stat-caption">{{ this.$store.state.hunger }}</span>
-      </Transition>
+    <Transition name="settings">
+      <AppSettings v-if="$store.state.settingsOpen" />
+    </Transition>
+    <Transition name="settings-bg">
+      <div @click="toggleSettings" id="settings-bg" v-if=$store.state.settingsOpen></div>
+    </Transition>
+    <div class="headwrap">
+      <div id="topbar">
+        <div @click="moneyTest" class="balance">
+          <mdicon name="circle-multiple" />{{ $store.state.balance }}
+        </div>
+        <button @click="toggleSettings" id="settings">
+          <mdicon name="cog" size="30" />
+        </button>
+      </div>
     </div>
-    <div :class="cleanlinessClass" @mouseleave="showTip(null)" @mouseover="showTip('cleanliness')" class="stat">
-      <mdicon name="shower" size="25" />
-      <div :style="{ height: (this.$store.state.cleanliness / 100) * 40 + 'px' }" class="progress"></div>
-      <Transition name="tooltip">
-        <span v-show="tooltip === 'cleanliness'" class="stat-caption">{{ this.$store.state.cleanliness }}</span>
-      </Transition>
-    </div>
-    <h2>fluffy</h2>
-    <div :class="happinessClass" @mouseleave="showTip(null)" @mouseover="showTip('happiness')" class="stat">
-      <mdicon name="emoticon-happy" size="25" />
-      <div :style="{ height: (this.$store.state.happiness / 100) * 40 + 'px' }" class="progress"></div>
-      <Transition name="tooltip"><span v-show="tooltip === 'happiness'" class="stat-caption">{{ this.$store.state.happiness }}</span>
-      </Transition>
-    </div>
-    <div :class="energyClass" @mouseleave="showTip(null)" @mouseover="showTip('energy')" class="stat">
-      <mdicon name="sleep" size="25" />
-      <div :style="{ height: (this.$store.state.energy / 100) * 40 + 'px' }" class="progress"></div>
-      <Transition name="tooltip"><span v-show="tooltip === 'energy'" class="stat-caption">{{ this.$store.state.energy }}</span>
-      </Transition>
+    <div class="headwrap">
+      <div id="statbar">
+        <div :class="hungerClass" @mouseleave="showTip(null)" @mouseover="showTip('hunger')" class="stat">
+          <mdicon name="food" size="25" />
+          <div :style="{ height: (this.$store.state.hunger / 100) * 40 + 'px' }" class="progress"></div>
+          <Transition name="tooltip">
+            <span v-show="tooltip === 'hunger'" class="stat-caption">{{ this.$store.state.hunger }}</span>
+          </Transition>
+        </div>
+        <div :class="cleanlinessClass" @mouseleave="showTip(null)" @mouseover="showTip('cleanliness')" class="stat">
+          <mdicon name="shower" size="25" />
+          <div :style="{ height: (this.$store.state.cleanliness / 100) * 40 + 'px' }" class="progress"></div>
+          <Transition name="tooltip">
+            <span v-show="tooltip === 'cleanliness'" class="stat-caption">{{ this.$store.state.cleanliness }}</span>
+          </Transition>
+        </div>
+        <h2>fluffy</h2>
+        <div :class="happinessClass" @mouseleave="showTip(null)" @mouseover="showTip('happiness')" class="stat">
+          <mdicon name="emoticon-happy" size="25" />
+          <div :style="{ height: (this.$store.state.happiness / 100) * 40 + 'px' }" class="progress"></div>
+          <Transition name="tooltip"><span v-show="tooltip === 'happiness'" class="stat-caption">{{
+            this.$store.state.happiness
+          }}</span>
+          </Transition>
+        </div>
+        <div :class="energyClass" @mouseleave="showTip(null)" @mouseover="showTip('energy')" class="stat">
+          <mdicon name="sleep" size="25" />
+          <div :style="{ height: (this.$store.state.energy / 100) * 40 + 'px' }" class="progress"></div>
+          <Transition name="tooltip"><span v-show="tooltip === 'energy'" class="stat-caption">{{
+            this.$store.state.energy
+          }}</span>
+          </Transition>
+        </div>
+      </div>
     </div>
   </header>
 </template>
 
 <script>
+import AppSettings from './AppSettings.vue';
+
 export default {
   data() {
     return {
@@ -38,7 +64,16 @@ export default {
       tooltip: null,
     }
   },
+  components: {
+    AppSettings,
+  },
   methods: {
+    toggleSettings() {
+      this.$store.commit('toggleSettings');
+    },
+    moneyTest() {
+      this.$store.commit('changeBalance', 100);
+    },
     showTip(stat) {
       this.tooltip = stat;
       // setTimeout(() => {
@@ -183,6 +218,26 @@ $blue2: #BDE0FE;
   transform: translateY(-20px);
 }
 
+.settings-enter-active,
+.settings-leave-active {
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.settings-enter-from,
+.settings-leave-to {
+  transform: translateY(10px);
+  opacity: 0;
+}
+
+.settings-bg-enter-active,
+.settings-bg-leave-active {
+  transition: opacity 0.3s ease-out;
+}
+
+.settings-bg-enter-from,
+.settings-bg-leave-to {
+  opacity: 0;
+}
 
 .green .progress {
   background-color: #31fa71;
@@ -196,18 +251,74 @@ $blue2: #BDE0FE;
   background-color: #FF3D00;
 }
 
-header {
-  @include flex(row, space-evenly, center, nowrap);
 
+#settings-bg {
+  @include absolute(0, 0, 0, 0);
+  background-color: #00000033;
+  z-index: 249;
+}
+
+.headwrap {
+  width: 100vw;
+  width: 100vw;
+  @include flex(row, center, center, nowrap);
+
+  &:first-child {
+
+    -webkit-backdrop-filter: brightness(0.9);
+    backdrop-filter: brightness(0.9);
+  }
+
+  div {
+    max-width: 400px;
+    width: 100vw;
+  }
+}
+
+#topbar {
+  @include flex(row, space-between, center, nowrap);
+
+
+  padding: 15px;
+
+  button {
+    background-color: transparent;
+    border: none;
+
+    span {
+      transition: color .07s ease-out;
+    }
+
+    &:hover span {
+      color: #fff;
+    }
+  }
+
+  .balance {
+    @include flex(row, flex-start, center, wrap);
+    gap: 5px;
+    // max-width: 70px;
+    // width: 100%;
+  }
+}
+
+#statbar {
+
+  @include flex(row, space-between, center, nowrap);
+  gap: 25px;
+
+
+  padding: 15px;
+}
+
+header {
+  @include flex(column, stretch, center, nowrap);
   // background-color: $pink;
   // border: 2px solid $pink;
   // border-style: none none solid none;
-  padding: 15px;
   // margin: 10px;
-  height: 65px;
-  gap: 25px;
+  height: 130px;
   z-index: 10;
-  max-width: 400px;
   width: 100vw;
 
   h2 {
