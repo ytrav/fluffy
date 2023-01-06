@@ -1,4 +1,7 @@
 <template>
+  <Transition name="loading">
+    <LoadingScreen v-if="loading" />
+  </Transition>
   <AppHeader />
   <div id="wrapper">
     <router-view v-slot="{ Component, route }">
@@ -13,8 +16,10 @@
 <script>
 import AppHeader from './components/AppHeader.vue';
 import AppNav from './components/AppNav.vue';
+import LoadingScreen from './components/LoadingScreen.vue'
 // import { beforeRouteLeave } from 'vue-router';
 import { mapState } from 'vuex';
+
 
 export default {
   name: 'App',
@@ -22,6 +27,7 @@ export default {
     return {
       // slide direction variable and the array with route order
       slideDirection: 'right',
+      loading: true,
       routesArray: [
         "/kitchen",
         "/bathroom",
@@ -33,6 +39,7 @@ export default {
   components: {
     AppHeader,
     AppNav,
+    LoadingScreen,
   },
 
   computed: {
@@ -54,34 +61,51 @@ export default {
       localStorage.setItem('happiness', this.happiness);
       localStorage.setItem('energy', this.energy);
       localStorage.setItem('foodList', JSON.stringify(this.foodList));
+      localStorage.setItem('settings', JSON.stringify(this.$store.state.settings));
     }, 2000);
+    setTimeout(() => {
+      console.log('loaded lel');
+      this.loading = false;
+    }, 1000);
+    // this.loading = false;
   },
 
   created() {
     const savedFoodList = JSON.parse(localStorage.getItem('foodList'));
     if (savedFoodList) {
       this.$store.dispatch('loadFoodList', savedFoodList);
-    }
-    if (localStorage.getItem('timestamp')) {
-      const savedTimestamp = Number(localStorage.getItem('timestamp'));
-      const currentTimestamp = Date.now();
-      const elapsedTime = currentTimestamp - savedTimestamp;
-      console.log(`Time saved was ${new Date(Number(savedTimestamp)).toString()} and current time is ${new Date(currentTimestamp).toString()}, time elapsed ${elapsedTime}`);
-      console.log(`expected to subtract the next amount of points from each stat:`);
+      console.log('defining the string');
+      const savedSettingsString = localStorage.getItem('settings');
+      if (savedSettingsString) {
+        console.log('if statement true');
+        const savedSettings = JSON.parse(savedSettingsString);
+        console.log('defined json');
+        this.$store.dispatch('loadSettings', savedSettings);
+        console.log('dispatch complete');
+      }
+      console.log('out of the loop, good or bad');
 
-      const ticks = elapsedTime / 5000;
-      console.log(`hunger value is ${this.$store.state.hunger}`);
-      this.calculateHunger(ticks);
-      console.log(`hunger value is ${this.$store.state.hunger}`);
-      console.log(`cleanliness value is ${this.$store.state.cleanliness}`);
-      this.calculateCleanliness(ticks);
-      console.log(`cleanliness value is ${this.$store.state.cleanliness}`);
-      console.log(`happiness value is ${this.$store.state.happiness}`);
-      this.calculateHappiness(ticks);
-      console.log(`happiness value is ${this.$store.state.happiness}`);
-      console.log(`energy value is ${this.$store.state.energy}`);
-      this.calculateEnergy(ticks);
-      console.log(`energy value is ${this.$store.state.energy}`);
+      if (localStorage.getItem('timestamp')) {
+        const savedTimestamp = Number(localStorage.getItem('timestamp'));
+        const currentTimestamp = Date.now();
+        const elapsedTime = currentTimestamp - savedTimestamp;
+        console.log(`Time saved was ${new Date(Number(savedTimestamp)).toString()} and current time is ${new Date(currentTimestamp).toString()}, time elapsed ${elapsedTime}`);
+        console.log(`expected to subtract the next amount of points from each stat:`);
+
+        const ticks = elapsedTime / 5000;
+        console.log(`hunger value is ${this.$store.state.hunger}`);
+        this.calculateHunger(ticks);
+        console.log(`hunger value is ${this.$store.state.hunger}`);
+        console.log(`cleanliness value is ${this.$store.state.cleanliness}`);
+        this.calculateCleanliness(ticks);
+        console.log(`cleanliness value is ${this.$store.state.cleanliness}`);
+        console.log(`happiness value is ${this.$store.state.happiness}`);
+        this.calculateHappiness(ticks);
+        console.log(`happiness value is ${this.$store.state.happiness}`);
+        console.log(`energy value is ${this.$store.state.energy}`);
+        this.calculateEnergy(ticks);
+        console.log(`energy value is ${this.$store.state.energy}`);
+      }
     }
   },
 
@@ -132,7 +156,7 @@ export default {
 
     calculateHunger(ticks) {
       console.log(`hunger was ${Number(localStorage.getItem('hunger'))} and it's a ${typeof Number(localStorage.getItem('hunger'))}`);
-      console.log(`no when we calculate and subtract 3 for every 330000 ticks, we get ${Math.max(0, Number(localStorage.getItem('hunger')) - 3 * Math.floor(ticks / 330000))}`);
+      console.log(`now when we calculate and subtract 3 for every 330000 ticks, we get ${Math.max(0, Number(localStorage.getItem('hunger')) - 3 * Math.floor(ticks / 330000))}`);
       let result = Math.max(0, Number(localStorage.getItem('hunger')) - 3 * Math.floor(ticks / 330000));
 
       if (result < 0) {
@@ -218,6 +242,18 @@ $blue2: #BDE0FE;
 // * {
 //   border: 1px solid rgba(255, 0, 0, 0.452);
 // }
+
+
+.loading-enter-active,
+.loading-leave-active {
+  transition: opacity 0.3s ease-out;
+}
+
+.loading-enter,
+.loading-leave-to {
+  opacity: 0;
+}
+
 
 .page-enter-active,
 .page-leave-active {

@@ -145,6 +145,10 @@ const store = createStore({
         loadFoodList(context, foodList) {
             context.commit('setFoodList', foodList);
         },
+
+        loadSettings(context, settings) {
+            context.commit('setSettings', settings);
+        }
     },
 
     mutations: {
@@ -171,6 +175,10 @@ const store = createStore({
 
         setFoodList(state, foodList) {
             state.foodList = foodList;
+        },
+
+        setSettings(state, settings) {
+            state.settings = settings
         },
 
 

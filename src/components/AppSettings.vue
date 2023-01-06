@@ -1,20 +1,21 @@
 <template>
     <div id="settings">
         <h2>Settings</h2>
-        <div class="settings-option">
+        <div class="settings-option" @click="commitSetting('arrows')" >
             <div class="caption">
-                <h4>Scroll arrows</h4>
-                <h5>Display arrow buttons to simplify scrolling on devices without trackpads or touchscreens</h5>
+                <h4>Scroll arrows (Experimental)</h4>
+                <h5>Display arrow buttons to simplify scrolling on devices without trackpads or touchscreens: {{
+                    $store.state.settings.showArrows
+                }}</h5>
             </div>
-            <label class="toggle" for="arrowButtons">
-                <input type="checkbox" class="toggle__input" id="arrowButtonsCheck" />
-                <span class="toggle-track">
-                    <span class="toggle-indicator"></span>
-                </span>
-            </label>
+            <div class="toggle-wrap">
+                <input id="arrowButtons" name="arrowButtons" type="checkbox"
+                class="toggle" v-model="$store.state.settings.showArrows">
+            </div>
+
 
         </div>
-        <button @click="toggleSettings">back</button>
+        <button style="display: none" @click="toggleSettings">back</button>
     </div>
 </template>
 
@@ -25,6 +26,9 @@ export default {
         toggleSettings() {
             this.$store.commit('toggleSettings');
         },
+        commitSetting(setting) {
+            this.$store.commit('changeSettings', setting);
+        }
     }
 }
 </script>
@@ -56,12 +60,29 @@ $blue2: #BDE0FE;
     @include absolute(100px, 10px, 100px, 10px);
     @include flex(column, flex-start, stretch, nowrap);
     z-index: 250;
-    background-color: $pink2;
+    background-color: #fff;
+    // backdrop-filter: blur(14px) brightness(0.8) grayscale(0.5);
     border-radius: 15px;
     padding: 25px;
 }
 
+#settings.kitchen {
+    background-color: #ffd7ba;
+}
+#settings.bathroom {
+    background-color: #A2D2FF;
+}
+#settings.playroom {
+    background-color: #adf7b6;
+}
+#settings.bedroom {
+    background-color: #CDB4DB;
+}
+
 .settings-option {
+    cursor: pointer;
+
+
     @include flex(row, space-between, center, nowrap);
     .caption {
         @include flex(column, stretch, flex-start, nowrap);
@@ -83,110 +104,55 @@ h5 {
 
 // checkbox style
 
-$toggle-indicator-size: 24px; // changing this number will resize the whole toggle
-$track-height: $toggle-indicator-size + 6;
-$track-width: $toggle-indicator-size * 2.5;
-$highContrastModeSupport: solid 2px transparent;
-/* 
-
-The following vars come from my theme. 
-You'll need to replace with your own color values. 
-
-- "#f5f5f5"
-- "$pink2"
-- "$pink"
-
-*/
-$track-border: $pink2;
-$track-background: #f5f5f5;
-$focus-ring: 0px 0px 0px 2px $pink;
-$speed: 0.3s;
-
-// Toggle specific styles
-.toggle {
-    align-items: center;
-    border-radius: 100px;
-    display: flex;
-    font-weight: 700;
-    margin-bottom: 16px;
-
-    &:last-of-type {
-        margin: 0;
-    }
+.toggle-wrap {
+    flex: 1;
+    flex-shrink: 0;
 }
 
-// Since we can't style the checkbox directly, we "hide" it so we can draw the toggle.
-.toggle__input {
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    height: 1px;
-    overflow: hidden;
-    position: absolute;
-    white-space: nowrap;
-    width: 1px;
 
-    // This style sets the focus ring. The ":not([disabled])" prevents the focus ring from creating a flash when the element is clicked.
-    &:not([disabled]):active+.toggle-track,
-    &:not([disabled]):focus+.toggle-track {
-        border: 1px solid transparent;
-        box-shadow: $focus-ring;
-    }
 
-    &:disabled+.toggle-track {
-        cursor: not-allowed;
-        opacity: 0.7;
-    }
-}
-
-.toggle-track {
-    background: $track-background;
-    border: 1px solid $track-border;
-    border-radius: 100px;
+input[type=checkbox] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
     cursor: pointer;
-    display: flex;
-    height: $track-height;
-    margin-right: 12px;
+}
+
+input[type=checkbox]:focus {
+    outline: 0;
+}
+
+.toggle {
+    height: 32px;
+    width: 52px;
+    border-radius: 16px;
+    display: inline-block;
     position: relative;
-    width: $track-width;
+    margin: 0;
+    border: 2px solid #474755;
+    background: linear-gradient(180deg, #2D2F39 0%, #1F2027 100%);
+    transition: all 0.2s ease;
 }
 
-.toggle-indicator {
-    align-items: center;
-    background: $pink;
-    border-radius: $toggle-indicator-size;
-    bottom: 2px;
-    display: flex;
-    height: $toggle-indicator-size;
-    justify-content: center;
-    left: 2px;
-    outline: $highContrastModeSupport;
+.toggle:after {
+    content: "";
     position: absolute;
-    transition: $speed;
-    width: $toggle-indicator-size;
+    top: 2px;
+    left: 2px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 1px 2px rgba(44, 44, 44, 0.2);
+    transition: all 0.2s cubic-bezier(0.5, 0.1, 0.75, 1.35);
 }
 
-// The check mark is optional
-.checkMark {
-    fill: #fff;
-    height: $toggle-indicator-size - 4;
-    width: $toggle-indicator-size - 4;
-    opacity: 0;
-    transition: opacity $speed ease-in-out;
+.toggle:checked {
+    border-color: #654FEC;
 }
 
-.toggle__input:checked+.toggle-track .toggle-indicator {
-    background: $pink;
-    transform: translateX($track-width - $track-height);
-
-    .checkMark {
-        opacity: 1;
-        transition: opacity $speed ease-in-out;
-    }
-}
-
-@media screen and (-ms-high-contrast: active) {
-    .toggle-track {
-        border-radius: 0;
-    }
+.toggle:checked:after {
+    transform: translatex(20px);
 }
 </style>

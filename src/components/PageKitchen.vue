@@ -2,15 +2,17 @@
   <main>
     <img src="./../assets/bunny.png" alt="bunny">
     <div class="interact">
-      <button class="arrow left" @click="scrollLeft">
+      <button v-if="$store.state.settings.showArrows"
+        class="arrow left" @click="scrollLeft">
         <mdicon name="chevron-left" />
       </button>
-      <button class="arrow right" @click="scrollRight">
+      <button v-if="$store.state.settings.showArrows"
+        class="arrow right" @click="scrollRight">
         <mdicon name="chevron-right" />
       </button>
       <div class="food-scroll" ref="scrollableContainer">
         <div class="food-item" v-for="(food, index) in foodList" :key="index" @click.prevent="selectFood(index)"
-          :class="{ 'food-selected': index === selectedIndex }">
+          :class="{ 'food-selected': index === selectedIndex, 'fluffy-arrows-disabled': !$store.state.settings.showArrows }">
           <mdicon :name="food.icon" />
           <span class="tag">{{ food.name }}</span>
           <Transition name="confirm" mode="out-in">
@@ -300,6 +302,10 @@ main {
 
     &:last-child {
       margin-right: 40px;
+    }
+
+    &.fluffy-arrows-disabled {
+      margin: 0 !important;
     }
   }
 
