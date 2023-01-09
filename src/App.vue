@@ -2,6 +2,12 @@
   <Transition name="loading">
     <LoadingScreen v-if="loading" />
   </Transition>
+  <Transition name="settings">
+    <AlertWindow @proceed="proceed" v-if="$store.state.alertVisible" />
+  </Transition>
+  <Transition name="settings-bg">
+    <div id="alert-bg" v-if="$store.state.alertVisible"></div>
+  </Transition>
   <AppHeader />
   <div id="wrapper">
     <router-view v-slot="{ Component, route }">
@@ -16,7 +22,8 @@
 <script>
 import AppHeader from './components/AppHeader.vue';
 import AppNav from './components/AppNav.vue';
-import LoadingScreen from './components/LoadingScreen.vue'
+import LoadingScreen from './components/LoadingScreen.vue';
+import AlertWindow from './components/AlertWindow.vue';
 // import { beforeRouteLeave } from 'vue-router';
 import { mapState } from 'vuex';
 
@@ -40,6 +47,7 @@ export default {
     AppHeader,
     AppNav,
     LoadingScreen,
+    AlertWindow,
   },
 
   computed: {
@@ -64,7 +72,7 @@ export default {
       localStorage.setItem('settings', JSON.stringify(this.$store.state.settings));
     }, 2000);
     setTimeout(() => {
-      console.log('loaded lel');
+      // console.log('loaded lel');
       this.loading = false;
     }, 1000);
     // this.loading = false;
@@ -124,6 +132,18 @@ export default {
     },
   },
   methods: {
+    proceed() {
+      
+      switch (this.$store.state.currentTask) {
+        case 'reset':
+          localStorage.clear();
+          location.reload();
+          break;
+      
+        default:
+          break;
+      }
+    },
     updateHunger(value) {
       console.log(`hunger value became ${value}`);
       if (value < 0) {
@@ -243,6 +263,44 @@ $blue2: #BDE0FE;
 //   border: 1px solid rgba(255, 0, 0, 0.452);
 // }
 
+a {
+  text-decoration: none;
+  color: initial;
+}
+
+
+.tooltip-enter-active,
+.tooltip-leave-active {
+  transition: all 0.2s ease-out;
+}
+
+.tooltip-enter-from,
+.tooltip-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.settings-enter-active,
+.settings-leave-active {
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.settings-enter-from,
+.settings-leave-to {
+  transform: translateY(10px);
+  opacity: 0;
+}
+
+.settings-bg-enter-active,
+.settings-bg-leave-active {
+  transition: opacity 0.3s ease-out;
+}
+
+.settings-bg-enter-from,
+.settings-bg-leave-to {
+  opacity: 0;
+}
+
 
 .loading-enter-active,
 .loading-leave-active {
@@ -290,8 +348,6 @@ $blue2: #BDE0FE;
   left: 0;
 }
 
-
-
 .slide-left-enter-active,
 .slide-left-leave-active {
   transition: all 0.25s ease-out;
@@ -325,6 +381,65 @@ main {
 
   @include flex(row, center, center, nowrap);
   // @include absolute(0, 0, 0, 0);
+}
+
+
+// alert
+
+
+#alert {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 370px;
+  // height: 250px;
+  z-index: 299;
+  background-color: #fff;
+  @include flex(column, space-between, stretch, nowrap);
+  gap: 20px;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+#alert-buttons {
+  @include flex(row, flex-end, center, wrap);
+  gap: 15px;
+
+  button {
+    border: none;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 10px;
+    min-width: 50px;
+
+    &:hover {
+      filter: brightness(0.9);
+    }
+
+    &:active {
+      filter: brightness(0.8);
+    }
+
+    &.red {
+      color: #FF3D00;
+      background-color: #ffe1d7;
+    }
+
+    &.green {
+      color: #006c00;
+      background-color: #cdffcd;
+    }
+  }
+}
+
+
+#settings-bg,
+#alert-bg {
+  @include absolute(0, 0, 0, 0);
+  background-color: #00000033;
+  z-index: 249;
 }
 
 img {

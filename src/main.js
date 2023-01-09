@@ -16,10 +16,23 @@ const store = createStore({
             energy: 15,
 
             settingsOpen: false,
+            alertVisible: false,
+
+            currentTask: null,
 
             settings: {
                 lang: 0, // 0 - eng, 1 - ukr, WIP
                 showArrows: true,
+            },
+            alert: {
+                title: 'Title',
+                message: 'This is a test message to see if the alert gets the correct text data.',
+                primaryName: 'OK',
+                primaryClass: 'green',
+                secondaryName: 'Cancel',
+                secondaryClass: 'normal',
+                primaryAction: 'ok',
+                secondaryAction: 'cancel',
             },
             foodList: [
                 {
@@ -263,7 +276,7 @@ const store = createStore({
 
         setBalance(state, value) {
             if (value < 0) {
-                console.log('EROR: balabce negative value');
+                console.log('ERROR: balance negative value');
             } else {
                 state.balance = value;
             }
@@ -273,7 +286,22 @@ const store = createStore({
             if (isNaN(amount) === false && state.balance + amount >= 0) {
                 state.balance += amount;
             }
-        }
+        },
+
+        setCurrentTask(state, task) {
+            state.currentTask = task;
+        },
+
+        toggleAlert(state) {
+            state.alertVisible = !state.alertVisible;
+        },
+
+        setAlert(state, data) {
+            state.alert.title = data.title;
+            state.alert.message = data.message;
+            state.alert.primaryAction = data.primaryAction;
+            state.alert.secondaryAction = data.secondaryAction;
+        },
     }
 })
 

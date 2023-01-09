@@ -1,5 +1,7 @@
 <template>
     <div id="loading">
+        <h2>fluffy</h2>
+        <!-- <h3>by ytrav</h3> -->
         <div class="box">
             <div class="container">
                 <span class="circle"></span>
@@ -36,8 +38,8 @@ $blue2: #BDE0FE;
 
 #loading {
     @include absolute(0, 0, 0, 0);
-    @include flex(row, center, center, nowrap);
-    background-color: #c5cae9;
+    @include flex(column, center, center, nowrap);
+    background-color: $purple;
     z-index: 300;
 }
 
@@ -51,12 +53,48 @@ $blue2: #BDE0FE;
 
 .box {
     width: 300px;
-    height: 300px;
-    background: #1a237e;
+    height: 100px;
+    // background: $pink;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.3);
+    // box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+h2 {
+    font-family: 'Shadows Into Light', cursive;
+    font-weight: normal;
+    font-size: 3em;
+    color: #fff;
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Old versions of Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+}
+
+h3 {
+    // font-family: 'Shadows Into Light', cursive;
+    font-weight: normal;
+    font-size: 1em;
+    color: #fff;
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Old versions of Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
 }
 
 .container {

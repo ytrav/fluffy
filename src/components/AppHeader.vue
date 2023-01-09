@@ -6,7 +6,7 @@
     <Transition name="settings-bg">
       <div @click="toggleSettings" id="settings-bg" v-if=$store.state.settingsOpen></div>
     </Transition>
-    <div class="headwrap">
+    <div class="headwrap top">
       <div id="topbar">
         <div @click="moneyTest" class="balance">
           <mdicon name="circle-multiple" />{{ $store.state.balance }}
@@ -207,38 +207,6 @@ $blue: #A2D2FF;
 $blue2: #BDE0FE;
 
 
-.tooltip-enter-active,
-.tooltip-leave-active {
-  transition: all 0.2s ease-out;
-}
-
-.tooltip-enter-from,
-.tooltip-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-
-.settings-enter-active,
-.settings-leave-active {
-  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-}
-
-.settings-enter-from,
-.settings-leave-to {
-  transform: translateY(10px);
-  opacity: 0;
-}
-
-.settings-bg-enter-active,
-.settings-bg-leave-active {
-  transition: opacity 0.3s ease-out;
-}
-
-.settings-bg-enter-from,
-.settings-bg-leave-to {
-  opacity: 0;
-}
-
 .green .progress {
   background-color: #31fa71;
 }
@@ -252,23 +220,17 @@ $blue2: #BDE0FE;
 }
 
 
-#settings-bg {
-  @include absolute(0, 0, 0, 0);
-  background-color: #00000033;
-  z-index: 249;
-}
 
 .headwrap {
   width: 100vw;
   width: 100vw;
   @include flex(row, center, center, nowrap);
 
-  &:first-child {
 
+  &.top {
     -webkit-backdrop-filter: brightness(0.9);
     backdrop-filter: brightness(0.9);
   }
-
   div {
     max-width: 400px;
     width: 100vw;
