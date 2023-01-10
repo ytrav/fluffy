@@ -11,7 +11,7 @@
         <div @click="moneyTest" class="balance">
           <mdicon name="circle-multiple" />{{ $store.state.balance }}
         </div>
-        <button @click="toggleSettings" id="settings">
+        <button @click="toggleSettings" id="settings-icon">
           <mdicon name="cog" size="30" />
         </button>
       </div>
@@ -231,6 +231,7 @@ $blue2: #BDE0FE;
     -webkit-backdrop-filter: brightness(0.9);
     backdrop-filter: brightness(0.9);
   }
+
   div {
     max-width: 400px;
     width: 100vw;
@@ -246,14 +247,20 @@ $blue2: #BDE0FE;
   button {
     background-color: transparent;
     border: none;
+    cursor: pointer;
+    transition: transform .2s ease-out;
 
     span {
-      transition: color .07s ease-out;
+      transition: color .1s ease-out;
     }
 
-    &:hover span {
-      color: #fff;
+    &:hover {
+      transform: rotate(90deg);
+      .mdi {
+        color: #fff;
+      }
     }
+
   }
 
   .balance {

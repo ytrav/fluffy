@@ -5,8 +5,12 @@
             <p>{{ $store.state.alert.message }}</p>
         </div>
         <div id="alert-buttons">
-            <button @click="action($store.state.alert.secondaryAction)" :class="$store.state.alert.secondaryClass">{{ $store.state.alert.secondaryName }}</button>
-            <button @click="action($store.state.alert.primaryAction)" :class="$store.state.alert.primaryClass">{{ $store.state.alert.primaryName }}</button>
+            <button @click="action($store.state.alert.secondaryAction)" :class="$store.state.alert.secondaryClass">{{
+                $store.state.alert.secondaryName
+            }}</button>
+            <button @click="action($store.state.alert.primaryAction)" :class="$store.state.alert.primaryClass">{{
+                $store.state.alert.primaryName
+            }}</button>
         </div>
     </div>
 </template>
@@ -14,14 +18,7 @@
 <script>
 export default {
     data() {
-        return {
-            title: 'Reset progress',
-            message: "Are you sure you want to erase all your saved progress. This will reset pet's stats, your coin balance and food in the kitchen to the initial values.",
-            primaryAction: 'Proceed',
-            secondaryAction: 'Cancel',
-            primaryClass: 'red',
-            secondaryClass: 'normal',
-        }
+        return {}
     },
     methods: {
         action(actionName) {
@@ -64,5 +61,4 @@ $pink2: #FFC8DD;
 $purple: #CDB4DB;
 $blue: #A2D2FF;
 $blue2: #BDE0FE;
-
 </style>

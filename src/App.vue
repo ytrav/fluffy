@@ -2,7 +2,7 @@
   <Transition name="loading">
     <LoadingScreen v-if="loading" />
   </Transition>
-  <Transition name="settings">
+  <Transition name="alert">
     <AlertWindow @proceed="proceed" v-if="$store.state.alertVisible" />
   </Transition>
   <Transition name="settings-bg">
@@ -63,7 +63,6 @@ export default {
   mounted() {
     setInterval(() => {
       localStorage.setItem('timestamp', Date.now());
-
       localStorage.setItem('hunger', this.hunger);
       localStorage.setItem('cleanliness', this.cleanliness);
       localStorage.setItem('happiness', this.happiness);
@@ -82,37 +81,20 @@ export default {
     const savedFoodList = JSON.parse(localStorage.getItem('foodList'));
     if (savedFoodList) {
       this.$store.dispatch('loadFoodList', savedFoodList);
-      console.log('defining the string');
       const savedSettingsString = localStorage.getItem('settings');
       if (savedSettingsString) {
-        console.log('if statement true');
         const savedSettings = JSON.parse(savedSettingsString);
-        console.log('defined json');
         this.$store.dispatch('loadSettings', savedSettings);
-        console.log('dispatch complete');
       }
-      console.log('out of the loop, good or bad');
 
       if (localStorage.getItem('timestamp')) {
         const savedTimestamp = Number(localStorage.getItem('timestamp'));
         const currentTimestamp = Date.now();
         const elapsedTime = currentTimestamp - savedTimestamp;
-        console.log(`Time saved was ${new Date(Number(savedTimestamp)).toString()} and current time is ${new Date(currentTimestamp).toString()}, time elapsed ${elapsedTime}`);
-        console.log(`expected to subtract the next amount of points from each stat:`);
-
-        const ticks = elapsedTime / 5000;
-        console.log(`hunger value is ${this.$store.state.hunger}`);
-        this.calculateHunger(ticks);
-        console.log(`hunger value is ${this.$store.state.hunger}`);
-        console.log(`cleanliness value is ${this.$store.state.cleanliness}`);
-        this.calculateCleanliness(ticks);
-        console.log(`cleanliness value is ${this.$store.state.cleanliness}`);
-        console.log(`happiness value is ${this.$store.state.happiness}`);
-        this.calculateHappiness(ticks);
-        console.log(`happiness value is ${this.$store.state.happiness}`);
-        console.log(`energy value is ${this.$store.state.energy}`);
-        this.calculateEnergy(ticks);
-        console.log(`energy value is ${this.$store.state.energy}`);
+        this.calculateHunger(elapsedTime);
+        this.calculateCleanliness(elapsedTime);
+        this.calculateHappiness(elapsedTime);
+        this.calculateEnergy(elapsedTime);
       }
     }
   },
@@ -133,13 +115,134 @@ export default {
   },
   methods: {
     proceed() {
-      
+
       switch (this.$store.state.currentTask) {
         case 'reset':
           localStorage.clear();
           location.reload();
           break;
-      
+        case 'restock':
+          this.$store.commit('toggleAlert');
+          this.$store.dispatch('loadFoodList', [
+            {
+              name: 'Apple',
+              icon: 'food-apple',
+              value: 10,
+            },
+            {
+              name: 'Quaso',
+              icon: 'food-croissant',
+              value: 25,
+            },
+            {
+              name: 'Coffee',
+              icon: 'coffee',
+              value: 10,
+            },
+            {
+              name: 'Noodles',
+              icon: 'noodles',
+              value: 55,
+            },
+            {
+              name: 'Baguette',
+              icon: 'baguette',
+              value: 35,
+            },
+            {
+              name: 'Cake',
+              icon: 'cake-variant',
+              value: 65,
+            },
+            {
+              name: 'Candy',
+              icon: 'candy',
+              value: 5,
+            },
+            {
+              name: 'Coffee',
+              icon: 'coffee',
+              value: 10,
+            },
+            {
+              name: 'Hamburger',
+              icon: 'hamburger',
+              value: 40,
+            },
+            {
+              name: 'Turkey',
+              icon: 'food-turkey',
+              value: 70,
+            },
+            {
+              name: 'Tea',
+              icon: 'tea',
+              value: 10,
+            },
+            {
+              name: 'Tea',
+              icon: 'tea',
+              value: 10,
+            },
+            {
+              name: 'Sugar',
+              icon: 'cube-outline',
+              value: 40,
+            },
+            {
+              name: 'Sugar',
+              icon: 'cube-outline',
+              value: 40,
+            },
+            {
+              name: 'Chili',
+              icon: 'chili-mild',
+              value: -15,
+            },
+            {
+              name: 'Chili',
+              icon: 'chili-mild',
+              value: -15,
+            },
+            {
+              name: 'Chili',
+              icon: 'chili-mild',
+              value: -15,
+            },
+            {
+              name: 'Cupcake',
+              icon: 'cupcake',
+              value: 25,
+            },
+            {
+              name: 'Beer',
+              icon: 'glass-mug',
+              value: 5,
+            },
+            {
+              name: 'Beer',
+              icon: 'glass-mug',
+              value: 5,
+            },
+            {
+              name: 'Wine',
+              icon: 'glass-wine',
+              value: 10,
+            },
+            {
+              name: 'Cupcake',
+              icon: 'cupcake',
+              value: 25,
+            },
+            {
+              name: 'Wine',
+              icon: 'glass-wine',
+              value: 10,
+            },
+
+          ]);
+          this.$store.commit('setCurrentTask', null);
+          break;
         default:
           break;
       }
@@ -175,38 +278,48 @@ export default {
 
 
     calculateHunger(ticks) {
-      console.log(`hunger was ${Number(localStorage.getItem('hunger'))} and it's a ${typeof Number(localStorage.getItem('hunger'))}`);
-      console.log(`now when we calculate and subtract 3 for every 330000 ticks, we get ${Math.max(0, Number(localStorage.getItem('hunger')) - 3 * Math.floor(ticks / 330000))}`);
-      let result = Math.max(0, Number(localStorage.getItem('hunger')) - 3 * Math.floor(ticks / 330000));
-
-      if (result < 0) {
-        result = 0;
+      let hunger = Number(localStorage.getItem('hunger'));
+      let tickInterval = 330000;
+      let hungerDecrement = 3;
+      let decrementCount = Math.floor(ticks / tickInterval);
+      let newHunger = hunger - (decrementCount * hungerDecrement);
+      if (newHunger < 0) {
+        newHunger = 0;
       }
-      this.$store.commit('setHunger', result);
+      this.$store.commit('setHunger', newHunger);
     },
     calculateCleanliness(ticks) {
-      let result = Math.max(0, localStorage.getItem('cleanliness') - 4 * Math.floor(ticks / 330000));
-
-      if (result < 0) {
-        result = 0;
+      let cleanliness = Number(localStorage.getItem('cleanliness'));
+      let tickInterval = 330000;
+      let cleanlinessDecrement = 4;
+      let decrementCount = Math.floor(ticks / tickInterval);
+      let newCleanliness = cleanliness - (decrementCount * cleanlinessDecrement);
+      if (newCleanliness < 0) {
+        newCleanliness = 0;
       }
-      this.$store.commit('setCleanliness', result);
+      this.$store.commit('setCleanliness', newCleanliness);
     },
     calculateHappiness(ticks) {
-      let result = Math.max(0, localStorage.getItem('happiness') - 5 * Math.floor(ticks / 330000));
-
-      if (result < 0) {
-        result = 0;
+      let happiness = Number(localStorage.getItem('happiness'));
+      let tickInterval = 330000;
+      let happinessDecrement = 5;
+      let decrementCount = Math.floor(ticks / tickInterval);
+      let newHappiness = happiness - (decrementCount * happinessDecrement);
+      if (newHappiness < 0) {
+        newHappiness = 0;
       }
-      this.$store.commit('setHappiness', result);
+      this.$store.commit('setHappiness', newHappiness);
     },
     calculateEnergy(ticks) {
-      let result = Math.max(0, localStorage.getItem('energy') - 4 * Math.floor(ticks / 330000));
-
-      if (result < 0) {
-        result = 0;
+      let energy = Number(localStorage.getItem('energy'));
+      let tickInterval = 330000;
+      let energyDecrement = 4;
+      let decrementCount = Math.floor(ticks / tickInterval);
+      let newEnergy = energy - (decrementCount * energyDecrement);
+      if (newEnergy < 0) {
+        newEnergy = 0;
       }
-      this.$store.commit('setEnergy', result);
+      this.$store.commit('setEnergy', newEnergy);
     },
 
 
@@ -288,6 +401,17 @@ a {
 .settings-enter-from,
 .settings-leave-to {
   transform: translateY(10px);
+  opacity: 0;
+}
+
+.alert-enter-active,
+.alert-leave-active {
+  transition: margin-top .3s ease-out, opacity .2s ease-out;
+}
+
+.alert-enter-from,
+.alert-leave-to {
+  margin-top: 10px;
   opacity: 0;
 }
 
@@ -413,6 +537,7 @@ main {
     padding: 10px;
     border-radius: 10px;
     min-width: 50px;
+    cursor: pointer;
 
     &:hover {
       filter: brightness(0.9);

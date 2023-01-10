@@ -11,9 +11,9 @@ const store = createStore({
         return {
             balance: 100,
             hunger: 80,
-            cleanliness: 70,
-            happiness: 100,
-            energy: 15,
+            cleanliness: 80,
+            happiness: 80,
+            energy: 80,
 
             settingsOpen: false,
             alertVisible: false,
@@ -28,7 +28,7 @@ const store = createStore({
                 title: 'Title',
                 message: 'This is a test message to see if the alert gets the correct text data.',
                 primaryName: 'OK',
-                primaryClass: 'green',
+                primaryClass: 'normal',
                 secondaryName: 'Cancel',
                 secondaryClass: 'normal',
                 primaryAction: 'ok',
@@ -301,6 +301,8 @@ const store = createStore({
             state.alert.message = data.message;
             state.alert.primaryAction = data.primaryAction;
             state.alert.secondaryAction = data.secondaryAction;
+            state.alert.primaryClass = data.primaryClass;
+            state.alert.secondaryClass = data.secondaryClass;
         },
     }
 })
