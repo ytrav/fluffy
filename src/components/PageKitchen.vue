@@ -158,7 +158,7 @@ main {
 .food-scroll {
   @include flex(row, flex-start, center, nowrap);
   gap: 40px;
-  overflow-x: overlay;
+  overflow-x: auto;
   overflow-y: hidden;
   padding: 0 15px;
 }
@@ -316,7 +316,7 @@ main {
 
     /* Chrome, Edge, and Safari */
     &::-webkit-scrollbar {
-      width: 10px;
+      width: 5px;
     }
 
     &::-webkit-scrollbar-track {
