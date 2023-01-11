@@ -5,6 +5,7 @@ import * as mdijs from '@mdi/js';
 import { createRouter, createWebHistory } from 'vue-router'
 
 import { createStore } from 'vuex';
+import './registerServiceWorker'
 
 const store = createStore({
     state() {

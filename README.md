@@ -1,4 +1,7 @@
-# fluffy
+# Fluffy - the tamagotchi game
+
+## Care for your very own pet in this Vue3-powered game inspired by the world famous toy!
+<br><br>
 
 ## Project setup
 ```

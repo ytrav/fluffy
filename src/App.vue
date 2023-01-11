@@ -41,6 +41,7 @@ export default {
         "/playroom",
         "/bedroom",
       ],
+      deferredPrompt: null,
     }
   },
   components: {
@@ -73,7 +74,14 @@ export default {
     setTimeout(() => {
       // console.log('loaded lel');
       this.loading = false;
+
     }, 1000);
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Prevent Chrome 67 and earlier from automatically showing the prompt
+      e.preventDefault();
+      // Stash the event so it can be triggered later.
+      this.deferredPrompt = e;
+    });
     // this.loading = false;
   },
 
