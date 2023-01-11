@@ -58,6 +58,7 @@ export default {
       'happiness',
       'energy',
       'foodList',
+      'balance',
     ])
   },
 
@@ -68,6 +69,7 @@ export default {
       localStorage.setItem('cleanliness', this.cleanliness);
       localStorage.setItem('happiness', this.happiness);
       localStorage.setItem('energy', this.energy);
+      localStorage.setItem('balance', this.balance);
       localStorage.setItem('foodList', JSON.stringify(this.foodList));
       localStorage.setItem('settings', JSON.stringify(this.$store.state.settings));
     }, 2000);
@@ -99,6 +101,7 @@ export default {
         const savedTimestamp = Number(localStorage.getItem('timestamp'));
         const currentTimestamp = Date.now();
         const elapsedTime = currentTimestamp - savedTimestamp;
+        this.$store.commit('setBalance', Number(localStorage.getItem('balance')));
         this.calculateHunger(elapsedTime);
         this.calculateCleanliness(elapsedTime);
         this.calculateHappiness(elapsedTime);

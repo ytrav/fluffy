@@ -59,7 +59,8 @@
         <div class="settings-option" @click="restock">
             <div class="caption">
                 <h4>Restock food</h4>
-                <h5>Reset the food in the kitchen to the initial amount. Use to feed the pet without resetting progress.</h5>
+                <h5>Reset the food in the kitchen to the initial amount. Use to feed the pet without resetting progress.
+                </h5>
             </div>
             <div class="toggle-wrap">
                 <mdicon name="food" />
@@ -67,7 +68,8 @@
         </div>
         <div class="setting-info">
             <mdicon name="information-outline" />
-            <p>Use these debug options to help you explore the game and its features. They are not intended to be present in the final release.</p>
+            <p>Use these debug options to help you explore the game and its features. They are not intended to be
+                present in the final release.</p>
         </div>
         <div class="pusher"></div>
     </div>
@@ -156,7 +158,11 @@ $purple: #CDB4DB;
 $blue: #A2D2FF;
 $blue2: #BDE0FE;
 
-h2, h4, h5, p, span {
+h2,
+h4,
+h5,
+p,
+span {
     -webkit-touch-callout: none;
     /* iOS Safari */
     -webkit-user-select: none;
@@ -178,7 +184,28 @@ h2, h4, h5, p, span {
     border-radius: 15px;
     padding: 0 25px;
     gap: 25px;
-    overflow: auto;
+    overflow: overlay;
+
+    /* ===== Scrollbar CSS ===== */
+    /* Firefox */
+        scrollbar-width: thin;
+        scrollbar-color: #b8b8b8 #ffffff;
+    
+
+    /* Chrome, Edge, and Safari */
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #ffffff00;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #b8b8b800;
+        border-radius: 10px;
+        border: 3px solid #ffffff00;
+    }
 
     .pusher {
         margin-bottom: 100px;
@@ -263,7 +290,9 @@ h2, h4, h5, p, span {
     margin: {
         top: 35px;
         bottom: 15px;
-    };
+    }
+
+    ;
 
 }
 
@@ -271,7 +300,9 @@ h2 {
     margin: {
         top: 15px;
         bottom: 15px;
-    };
+    }
+
+    ;
 }
 
 h4 {

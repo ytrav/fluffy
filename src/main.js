@@ -278,6 +278,7 @@ const store = createStore({
         setBalance(state, value) {
             if (value < 0) {
                 console.log('ERROR: balance negative value');
+                state.balance = 0;
             } else {
                 state.balance = value;
             }
