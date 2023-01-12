@@ -1,7 +1,22 @@
 {
     "name": "Fluffy",
     "short_name": "Fluffy",
-    "start_url": ".",
+    "background_color": "#CDB4DB",
+    "manifestOptions": {
+      "background_color": "#CDB4DB"
+    },
+    "categories": [
+        "game",
+        "online",
+        "free",
+        "tamagotchi",
+        "vue",
+        "cute",
+        "fluffy",
+        "ytrav"
+    ],
+    "description": "Cute tamagotchi-inspired free online game! Raise and care for your pet in Fluffy! Made with love, by ytrav.",
+    "start_url": "https://fluffy-ytrav.vercel.app",
     "display": "standalone",
     "icons": [
         {
