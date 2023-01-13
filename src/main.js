@@ -15,6 +15,7 @@ const store = createStore({
             cleanliness: 80,
             happiness: 80,
             energy: 80,
+            asleep: false,
 
             settingsOpen: false,
             alertVisible: false,
@@ -267,6 +268,9 @@ const store = createStore({
             } else {
                 state.energy = value;
             }
+        },
+        toggleSleep(state) {
+            state.asleep = !state.asleep;
         },
         removeFood(state, index) {
             state.foodList.splice(index, 1);

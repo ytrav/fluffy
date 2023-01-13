@@ -122,6 +122,9 @@ export default {
     $route(to, from) {
       // Update the slide direction when the route changes
       this.slideDirection = this.getRouteDirection(from.path, to.path);
+      if (this.$store.state.asleep === true) {
+        this.$store.commit('toggleSleep');
+      }
     },
   },
   methods: {
@@ -290,7 +293,7 @@ export default {
 
     calculateHunger(ticks) {
       let hunger = Number(localStorage.getItem('hunger'));
-      let tickInterval = 330000;
+      let tickInterval = 660000;
       let hungerDecrement = 3;
       let decrementCount = Math.floor(ticks / tickInterval);
       let newHunger = hunger - (decrementCount * hungerDecrement);
@@ -301,7 +304,7 @@ export default {
     },
     calculateCleanliness(ticks) {
       let cleanliness = Number(localStorage.getItem('cleanliness'));
-      let tickInterval = 330000;
+      let tickInterval = 660000;
       let cleanlinessDecrement = 4;
       let decrementCount = Math.floor(ticks / tickInterval);
       let newCleanliness = cleanliness - (decrementCount * cleanlinessDecrement);
@@ -312,7 +315,7 @@ export default {
     },
     calculateHappiness(ticks) {
       let happiness = Number(localStorage.getItem('happiness'));
-      let tickInterval = 330000;
+      let tickInterval = 660000;
       let happinessDecrement = 5;
       let decrementCount = Math.floor(ticks / tickInterval);
       let newHappiness = happiness - (decrementCount * happinessDecrement);
@@ -323,7 +326,7 @@ export default {
     },
     calculateEnergy(ticks) {
       let energy = Number(localStorage.getItem('energy'));
-      let tickInterval = 330000;
+      let tickInterval = 660000;
       let energyDecrement = 4;
       let decrementCount = Math.floor(ticks / tickInterval);
       let newEnergy = energy - (decrementCount * energyDecrement);

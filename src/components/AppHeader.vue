@@ -88,7 +88,7 @@ export default {
       this.$store.commit('changeCleanliness', -4);
       this.$store.commit('changeHappiness', -5);
       this.$store.commit('changeEnergy', -4);
-      that.interval = Math.floor(Math.random() * (660000 - 330000 + 1)) + 330000;
+      that.interval = Math.floor(Math.random() * (1_320_000 - 660_000 + 1)) + 660_000;
     }, this.interval);
   },
   computed: {
